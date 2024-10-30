@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="sqlite-jdbc-3.40.0.0">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../../Msc Computer science - Accessments/Advanced Object-Oriented Programming (6G7V0039_2425_9)/sqlite-jdbc-3.40.0.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
