@@ -2,7 +2,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Controller {
+public class ControllerHomeAppliance {
     public static void main(String[] args) throws SQLException {
         HomeApplianceDAO homeApplianceDAO = new HomeApplianceDAO();
         String selection;
@@ -24,10 +24,14 @@ public class Controller {
                 case "1":
                     // insert code to find all appliances
                     System.out.println("Retrieving all products ...");
+
                     ArrayList appliances = homeApplianceDAO.findAllProducts();
+                    // DynamicHTMLTable dynamicHTMLTable = new DynamicHTMLTable();
                     for (int i = 0; i < appliances.size(); i++) {
                         System.out.println(appliances.get(i));
                     }
+
+                    // dynamicHTMLTable.webView(appliances);
                     break;
                 case "2":
                     System.out.println("\nSearch for a product by ID");
@@ -66,6 +70,6 @@ public class Controller {
             }
             System.out.println();
         }while (!selection.equals("6"));
-        homeApplianceDAO.closeConnection();
+        HomeApplianceDAO.closeConnection();
     }
 }

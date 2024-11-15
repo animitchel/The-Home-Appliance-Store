@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class HomeApplianceDAO {
 
-    private Connection connectDB() {
+    public static Connection connectDB() {
         String url = "jdbc:sqlite:homeApplianceDB.sqlite";
 
         try {
@@ -24,7 +24,11 @@ public class HomeApplianceDAO {
         return null;
     }
 
-    public void closeConnection() throws SQLException {
+    public static PreparedStatement preparedStatementMethod(String query) throws SQLException {
+        return HomeApplianceDAO.connectDB().prepareStatement(query);
+    }
+
+    public static void closeConnection() throws SQLException {
         connectDB().close();
     }
 
@@ -110,10 +114,10 @@ public class HomeApplianceDAO {
             System.out.println(updateProduct[i]);
             String res = scanner.nextLine();
 
-            if (res.length() == 0 && i < 3){
+            if (res.length() == 0 && i < updateProduct.length - 1){
                 continue;
             }
-            if (res.length() == 0 && i == 3){
+            if (res.length() == 0 && i == updateProduct.length - 1){
                 break;
             }
             String query = "UPDATE appliance SET " + productAttribute[i] +" = ? WHERE id = ?";

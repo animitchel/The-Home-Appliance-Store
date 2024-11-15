@@ -37,16 +37,16 @@ public class HomeAppliance {
     }
 
     public String getSku(){
-        return this.sku;
+        return sku;
     }
     public String getDescription(){
-        return this.description;
+        return description;
     }
     public String getCategory(){
-        return this.category;
+        return category;
     }
     public int getPrice(){
-        return this.price;
+        return price;
     }
 
         @Override
