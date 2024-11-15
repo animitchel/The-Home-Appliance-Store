@@ -1,6 +1,10 @@
+package com.example;
+
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
+
+import static com.example.HomeApplianceDAO.closeConnection;
 
 public class ControllerHomeAppliance {
     public static void main(String[] args) throws SQLException {
@@ -26,7 +30,7 @@ public class ControllerHomeAppliance {
                     System.out.println("Retrieving all products ...");
 
                     ArrayList appliances = homeApplianceDAO.findAllProducts();
-                    // DynamicHTMLTable dynamicHTMLTable = new DynamicHTMLTable();
+                    // com.example.DynamicHTMLTable dynamicHTMLTable = new com.example.DynamicHTMLTable();
                     for (int i = 0; i < appliances.size(); i++) {
                         System.out.println(appliances.get(i));
                     }
@@ -70,6 +74,6 @@ public class ControllerHomeAppliance {
             }
             System.out.println();
         }while (!selection.equals("6"));
-        HomeApplianceDAO.closeConnection();
+        closeConnection();
     }
 }

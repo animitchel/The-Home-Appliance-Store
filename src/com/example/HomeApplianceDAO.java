@@ -1,3 +1,5 @@
+package com.example;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -44,7 +46,7 @@ public class HomeApplianceDAO {
         ArrayList<HomeAppliance> productList = new ArrayList<>();
 
         String query = "SELECT * FROM appliance";
-        PreparedStatement preparedStatement = connectDB().prepareStatement(query);
+        PreparedStatement preparedStatement = preparedStatementMethod(query);
         ResultSet rs = preparedStatement.executeQuery();
 
         while (rs.next()) {
@@ -66,7 +68,7 @@ public class HomeApplianceDAO {
 
     public HomeAppliance findProduct(int id) throws SQLException {
         String query = "SELECT * FROM appliance WHERE id = ?";
-        PreparedStatement preparedStatement = connectDB().prepareStatement(query);
+        PreparedStatement preparedStatement = preparedStatementMethod(query);
 
         // Set the parameter for id
         preparedStatement.setInt(1, id);
@@ -90,7 +92,7 @@ public class HomeApplianceDAO {
 
     public Boolean deleteProduct(int id) throws SQLException {
         String query = "DELETE FROM appliance WHERE id = ?";
-        PreparedStatement preparedStatement = connectDB().prepareStatement(query);
+        PreparedStatement preparedStatement = preparedStatementMethod(query);
         preparedStatement.setInt(1, id);
         int rs = preparedStatement.executeUpdate();
         System.out.println(rs + " rows affected");
@@ -99,7 +101,7 @@ public class HomeApplianceDAO {
     }
 
     public Boolean updateProduct(HomeAppliance homeAppliance) throws SQLException {
-        String[] updateProduct = {
+        String[] updateProductPrompts = {
                 "Please enter the sku",
                 "Please enter the description",
                 "Please enter the category",
@@ -109,19 +111,19 @@ public class HomeApplianceDAO {
 
         Scanner scanner = new Scanner(System.in);
         System.out.println(homeAppliance);
-        for (int i = 0; i < updateProduct.length; i++) {
+        for (int i = 0; i < updateProductPrompts.length; i++) {
 
-            System.out.println(updateProduct[i]);
+            System.out.println(updateProductPrompts[i]);
             String res = scanner.nextLine();
 
-            if (res.length() == 0 && i < updateProduct.length - 1){
+            if (res.length() == 0 && i < updateProductPrompts.length - 1){
                 continue;
             }
-            if (res.length() == 0 && i == updateProduct.length - 1){
+            if (res.length() == 0 && i == updateProductPrompts.length - 1){
                 break;
             }
             String query = "UPDATE appliance SET " + productAttribute[i] +" = ? WHERE id = ?";
-            PreparedStatement preparedStatement = connectDB().prepareStatement(query);
+            PreparedStatement preparedStatement = preparedStatementMethod(query);
             preparedStatement.setString(1, (i == 0 ? res.toUpperCase() : res));
             preparedStatement.setInt(2, homeAppliance.getId());
             rowsUpdated = preparedStatement.executeUpdate();
@@ -133,7 +135,7 @@ public class HomeApplianceDAO {
 
     public Boolean addProduct(HomeAppliance homeAppliance) throws SQLException {
         String insertSql = "INSERT INTO appliance (sku, description, category, price) VALUES (?, ?, ?, ?)";
-        PreparedStatement preparedStatement = connectDB().prepareStatement(insertSql);
+        PreparedStatement preparedStatement = preparedStatementMethod(insertSql);
 
         preparedStatement.setString(1, homeAppliance.getSku());
         preparedStatement.setString(2, homeAppliance.getDescription());

@@ -1,3 +1,5 @@
+package com.example;
+
 public class HomeAppliance {
     private int id;
     private String sku; // Stock keeping unit (a unique code for each product)
@@ -12,44 +14,28 @@ public class HomeAppliance {
         this.price = price;
     }
 
-    public int setId(int id){
+    int setId(int id){
         return this.id = id;
     }
 
-//    public String setSku(String sku){
-//        return this.sku = sku;
-//    }
-//
-//    public String setDescription(String description){
-//        return this.description = description;
-//    }
-//
-//    public String setCategory(String category){
-//        return this.category = category;
-//    }
-//
-//    public int setPrice(int price){
-//        return this.price = price;
-//    }
-
-    public int getId(){
+    int getId(){
         return this.id;
     }
 
-    public String getSku(){
+    String getSku(){
         return sku;
     }
-    public String getDescription(){
+    String getDescription(){
         return description;
     }
-    public String getCategory(){
+    String getCategory(){
         return category;
     }
-    public int getPrice(){
+    int getPrice(){
         return price;
     }
 
-        @Override
+    @Override
     public String toString() {
         return "Product={" +
                 "id=" + id +
