@@ -6,7 +6,14 @@ public class Customer {
     private String businessName;
     private String telephoneNumber;
 
-    public Customer(
+    /**
+     * Customer Class constructor
+     *
+     * @param businessName
+     * @param address
+     * @param telephoneNumber
+     */
+    Customer(
             String businessName,
             Address address, String telephoneNumber) {
 
@@ -15,23 +22,42 @@ public class Customer {
         this.telephoneNumber = telephoneNumber;
     }
 
-
+    /**
+     *
+     * @param customerID
+     */
     void setCustomerID(int customerID) {
         this.customerID = customerID;
     }
 
+    /**
+     *
+     * @return
+     */
     int getCustomerID() {
         return customerID;
     }
 
+    /**
+     *
+     * @return
+     */
     String getBusinessName() {
         return businessName;
     }
 
+    /**
+     *
+     * @return
+     */
     Address getAddress() {
         return address;
     }
 
+    /**
+     *
+     * @return
+     */
     String getTelephoneNumber() {
         return telephoneNumber;
     }

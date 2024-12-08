@@ -2,11 +2,14 @@ package com.example;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class HomeApplianceDAO {
 
-    public static Connection connectDB() {
+    /**
+     *
+     * @return
+     */
+    static Connection connectDB() {
         String url = "jdbc:sqlite:homeApplianceDB.sqlite";
 
         try {
@@ -26,23 +29,47 @@ public class HomeApplianceDAO {
         return null;
     }
 
-    public static PreparedStatement preparedStatementMethod(String query) throws SQLException {
+    /**
+     *
+     * @param query
+     * @return
+     * @throws SQLException
+     */
+    static PreparedStatement preparedStatementMethod(String query) throws SQLException {
         return HomeApplianceDAO.connectDB().prepareStatement(query);
     }
 
-    public static void closeConnection() throws SQLException {
+    /**
+     *
+     * @throws SQLException
+     */
+    static void closeConnection() throws SQLException {
         connectDB().close();
     }
 
+    /**
+     *
+     * @param id
+     * @param sku
+     * @param description
+     * @param category
+     * @param price
+     * @return
+     */
     private HomeAppliance homeApplianceAttrs(
             int id, String sku, String description,
-            String category, int price) throws SQLException {
+            String category, int price) {
         HomeAppliance product = new HomeAppliance(sku, description, category, price);
         product.setId(id);
         return product;
     }
 
-    public ArrayList findAllProducts() throws SQLException {
+    /**
+     *
+     * @return
+     * @throws SQLException
+     */
+    ArrayList findAllProducts() throws SQLException {
         ArrayList<HomeAppliance> productList = new ArrayList<>();
 
         String query = "SELECT * FROM appliance";
@@ -66,7 +93,13 @@ public class HomeApplianceDAO {
 
     }
 
-    public HomeAppliance findProduct(int id) throws SQLException {
+    /**
+     *
+     * @param id
+     * @return
+     * @throws SQLException
+     */
+    HomeAppliance findProduct(int id) throws SQLException {
         String query = "SELECT * FROM appliance WHERE id = ?";
         PreparedStatement preparedStatement = preparedStatementMethod(query);
 
@@ -90,7 +123,13 @@ public class HomeApplianceDAO {
 
     }
 
-    public Boolean deleteProduct(int id) throws SQLException {
+    /**
+     *
+     * @param id
+     * @return
+     * @throws SQLException
+     */
+    Boolean deleteProduct(int id) throws SQLException {
         String query = "DELETE FROM appliance WHERE id = ?";
         PreparedStatement preparedStatement = preparedStatementMethod(query);
         preparedStatement.setInt(1, id);
@@ -100,40 +139,70 @@ public class HomeApplianceDAO {
         return (rs > 0);
     }
 
-    public Boolean updateProduct(HomeAppliance homeAppliance) throws SQLException {
-        String[] updateProductPrompts = {
-                "Please enter the sku",
-                "Please enter the description",
-                "Please enter the category",
-                "Please enter the price"};
-        String[] productAttribute = {"sku", "description", "category", "price"};
+    /**
+     *
+     * @param homeAppliance
+     * @return
+     * @throws SQLException
+     */
+    Boolean updateProduct(HomeAppliance homeAppliance) throws SQLException {
+        //String[] productAttribute = {"sku", "description", "category", "price"};
+        HomeAppliance currentProduct = findProduct(homeAppliance.getId());
         int rowsUpdated = 0;
 
-        Scanner scanner = new Scanner(System.in);
-        System.out.println(homeAppliance);
-        for (int i = 0; i < updateProductPrompts.length; i++) {
+        String query = "" +
+                "UPDATE appliance " +
+                "SET sku = ?, " +
+                "description = ?, " +
+                "category = ?, " +
+                "price = ? " +
+                "WHERE id = ?";
 
-            System.out.println(updateProductPrompts[i]);
-            String res = scanner.nextLine();
+        PreparedStatement preparedStatement = preparedStatementMethod(query);
 
-            if (res.length() == 0 && i < updateProductPrompts.length - 1){
-                continue;
-            }
-            if (res.length() == 0 && i == updateProductPrompts.length - 1){
-                break;
-            }
-            String query = "UPDATE appliance SET " + productAttribute[i] +" = ? WHERE id = ?";
-            PreparedStatement preparedStatement = preparedStatementMethod(query);
-            preparedStatement.setString(1, (i == 0 ? res.toUpperCase() : res));
-            preparedStatement.setInt(2, homeAppliance.getId());
-            rowsUpdated = preparedStatement.executeUpdate();
-            preparedStatement.close();
-
+        if (homeAppliance.getSku().isEmpty() || homeAppliance.getSku() == null){
+            preparedStatement.setString(1, currentProduct.getSku());
+        } else {
+            preparedStatement.setString(1, homeAppliance.getSku());
+            rowsUpdated += 1;
         }
+
+        if (homeAppliance.getDescription().isEmpty() || homeAppliance.getDescription() == null){
+            preparedStatement.setString(2, currentProduct.getDescription());
+        } else {
+            preparedStatement.setString(2, homeAppliance.getDescription());
+            rowsUpdated += 1;
+        }
+
+        if (homeAppliance.getCategory().isEmpty() || homeAppliance.getCategory() == null){
+            preparedStatement.setString(3, currentProduct.getCategory());
+        } else {
+            preparedStatement.setString(3, homeAppliance.getCategory());
+            rowsUpdated += 1;
+        }
+
+        if (homeAppliance.getPrice() == 0){
+            preparedStatement.setInt(4, currentProduct.getPrice());
+        } else {
+            preparedStatement.setInt(4, homeAppliance.getPrice());
+            rowsUpdated += 1;
+        }
+
+
+        preparedStatement.setInt(5, homeAppliance.getId());
+        rowsUpdated = preparedStatement.executeUpdate();
+        preparedStatement.close();
+
         return (rowsUpdated > 0);
     }
 
-    public Boolean addProduct(HomeAppliance homeAppliance) throws SQLException {
+    /**
+     *
+     * @param homeAppliance
+     * @return
+     * @throws SQLException
+     */
+    Boolean addProduct(HomeAppliance homeAppliance) throws SQLException {
         String insertSql = "INSERT INTO appliance (sku, description, category, price) VALUES (?, ?, ?, ?)";
         PreparedStatement preparedStatement = preparedStatementMethod(insertSql);
 

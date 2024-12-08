@@ -7,6 +7,13 @@ public class HomeAppliance {
     private String category;
     private int price;
 
+    /**
+     *
+     * @param sku
+     * @param description
+     * @param category
+     * @param price
+     */
     public HomeAppliance(String sku, String description, String category, int price) {
         this.sku = sku;
         this.description = description;
@@ -14,23 +21,51 @@ public class HomeAppliance {
         this.price = price;
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     int setId(int id){
         return this.id = id;
     }
 
+    /**
+     *
+     * @return
+     */
     int getId(){
         return this.id;
     }
 
+    /**
+     *
+     * @return
+     */
     String getSku(){
         return sku;
     }
+
+    /**
+     *
+     * @return
+     */
     String getDescription(){
         return description;
     }
+
+    /**
+     *
+     * @return
+     */
     String getCategory(){
         return category;
     }
+
+    /**
+     *
+     * @return
+     */
     int getPrice(){
         return price;
     }

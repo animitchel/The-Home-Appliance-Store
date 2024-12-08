@@ -8,6 +8,15 @@ public class Address {
     private String country;
     private String postCode;
 
+
+    /**
+     *
+     * @param addressLine0
+     * @param addressLine1
+     * @param addressLine2
+     * @param country
+     * @param postCode
+     */
     public Address(String addressLine0, String addressLine1,
                    String addressLine2, String country,
                    String postCode) {
@@ -18,50 +27,58 @@ public class Address {
         this.postCode = postCode;
     }
 
+    /**
+     *
+     * @param addressID
+     */
     void setAddressID(int addressID) {
         this.addressID = addressID;
     }
 
-//    public void setAddressLine0(String addressLine0) {
-//        this.addressLine0 = addressLine0;
-//    }
-//
-//    public void setAddressLine1(String addressLine1) {
-//        this.addressLine1 = addressLine1;
-//    }
-//
-//    public void setAddressLine2(String addressLine2) {
-//        this.addressLine2 = addressLine2;
-//    }
-//
-//    public void setCountry(String country) {
-//        this.country = country;
-//    }
-//
-//    public void setPostCode(String postCode) {
-//        this.postCode = postCode;
-//   }
-
+    /**
+     *
+     * @return
+     */
     int getAddressID() {
         return addressID;
     }
 
+    /**
+     *
+     * @return
+     */
     String getAddressLine0() {
         return addressLine0;
     }
 
+    /**
+     *
+     * @return
+     */
     String getAddressLine1() {
         return addressLine1;
     }
 
+    /**
+     *
+     * @return
+     */
     String getAddressLine2() {
         return addressLine2;
     }
 
+    /**
+     *
+     * @return
+     */
     String getCountry() {
         return country;
     }
 
+    /**
+     *
+     * @return
+     */
     String getPostCode() {
         return postCode;
     }

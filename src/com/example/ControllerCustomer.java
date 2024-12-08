@@ -30,12 +30,10 @@ public class ControllerCustomer {
                     System.out.println("Retrieving all Customers ...");
 
                     ArrayList customers = customerDAO.findAllCustomer();
-                    //com.example.DynamicHTMLTable dynamicHTMLTable = new com.example.DynamicHTMLTable();
                     for (int i = 0; i < customers.size(); i++) {
                         System.out.println(customers.get(i));
                     }
 
-                    //dynamicHTMLTable.webView(appliances);
                     break;
                 case "2":
                     System.out.println("\nSearch for a customer by ID");
@@ -78,7 +76,42 @@ public class ControllerCustomer {
                 case "4":
                     System.out.println("\nUpdate a customer by ID");
                     String pk = in.nextLine();
-                    customerDAO.updateCustomer(customerDAO.findCustomer(Integer.valueOf(pk)));
+                    Customer customerToUpdate = customerDAO.findCustomer(Integer.valueOf(pk));
+
+                    System.out.println("Enter Customer business Name: ");
+                    String updatedCustomerBusinessName = in.nextLine();
+
+                    System.out.println("Enter Customer Addresssline0: ");
+                    String updatedCustomerAddresssline0 = in.nextLine();
+
+                    System.out.println("Enter Customer Addresssline1: ");
+                    String updatedCustomerAddresssline1 = in.nextLine();
+
+                    System.out.println("Enter Customer Addresssline2: ");
+                    String updatedCustomerAddresssline2 = in.nextLine();
+
+                    System.out.println("Enter Customer country: ");
+                    String updatedCustomerCountry = in.nextLine();
+
+                    System.out.println("Enter Customer postcode: ");
+                    String updatedCustomerPostcode = in.nextLine();
+
+                    System.out.println("Enter Customer telephone number: ");
+                    String updatedCustomerTelephoneNumber = in.nextLine();
+
+                    Customer updatedCustomerObj = customerDAO.returnUpdatedCustomerWithAddress(
+                            customerToUpdate.getAddress().getAddressID(),
+                            customerToUpdate.getCustomerID(),
+                            updatedCustomerAddresssline0,
+                            updatedCustomerAddresssline1,
+                            updatedCustomerAddresssline2,
+                            updatedCustomerCountry,
+                            updatedCustomerPostcode,
+                            updatedCustomerBusinessName,
+                            updatedCustomerTelephoneNumber
+                    );
+
+                    customerDAO.updateCustomer(updatedCustomerObj);
                     break;
                 case "5":
                     System.out.println("\nDelete a customer by ID");

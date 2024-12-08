@@ -30,12 +30,10 @@ public class ControllerHomeAppliance {
                     System.out.println("Retrieving all products ...");
 
                     ArrayList appliances = homeApplianceDAO.findAllProducts();
-                    // com.example.DynamicHTMLTable dynamicHTMLTable = new com.example.DynamicHTMLTable();
                     for (int i = 0; i < appliances.size(); i++) {
                         System.out.println(appliances.get(i));
                     }
 
-                    // dynamicHTMLTable.webView(appliances);
                     break;
                 case "2":
                     System.out.println("\nSearch for a product by ID");
@@ -53,7 +51,10 @@ public class ControllerHomeAppliance {
                     System.out.println("Enter product category: ");
                     String productCategory = in.nextLine();
                     System.out.println("Enter product price: ");
-                    int productPrice = Integer.valueOf(in.nextLine());
+                    String productPriceInt = in.nextLine();
+                    int productPrice = Integer.valueOf(
+                            productPriceInt.isEmpty() ? "0" : productPriceInt
+                    );
 
 
                     HomeAppliance homeAppliance = new HomeAppliance(
@@ -64,7 +65,32 @@ public class ControllerHomeAppliance {
                 case "4":
                     System.out.println("\nUpdate a product by ID");
                     String pk = in.nextLine();
-                    homeApplianceDAO.updateProduct(homeApplianceDAO.findProduct(Integer.valueOf(pk)));
+
+                    HomeAppliance product = homeApplianceDAO.findProduct(Integer.valueOf(pk));
+
+                    System.out.println(product);
+
+                    System.out.println("Enter product sku: ");
+                    String updateProductSku = in.nextLine();
+                    System.out.println("Enter product description: ");
+                    String updateProductDescription = in.nextLine();
+                    System.out.println("Enter product category: ");
+                    String updateProductCategory = in.nextLine();
+                    System.out.println("Enter product price: ");
+                    String updateProductPrice = in.nextLine();
+                    int updateProductPriceNum = Integer.valueOf(
+                            updateProductPrice.isEmpty() ? "0" : updateProductPrice
+                    );
+
+
+                    HomeAppliance updateHomeApplianceObj = new HomeAppliance(
+                            updateProductSku.toUpperCase(), updateProductDescription,
+                            updateProductCategory, updateProductPriceNum);
+                    updateHomeApplianceObj.setId(product.getId());
+
+
+                    homeApplianceDAO.updateProduct(updateHomeApplianceObj);
+
                     break;
                 case "5":
                     System.out.println("\nDelete a product by ID");

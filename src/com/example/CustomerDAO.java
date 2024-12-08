@@ -4,16 +4,21 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 import static com.example.HomeApplianceDAO.preparedStatementMethod;
 
 
-
 public class CustomerDAO {
 
-    private Customer customer;
-
+    /**
+     *
+     * @param id
+     * @param addressId
+     * @param business
+     * @param telephoneNumber
+     * @return
+     * @throws SQLException
+     */
     private Customer customerAttrs(
             int id, int addressId, String business,
             String telephoneNumber) throws SQLException {
@@ -26,6 +31,12 @@ public class CustomerDAO {
         return customer;
     }
 
+    /**
+     *
+     * @return
+     * @throws SQLException
+     * @throws NoSuchFieldException
+     */
     ArrayList findAllCustomer() throws SQLException, NoSuchFieldException {
         ArrayList<Customer> customerList = new ArrayList<>();
 
@@ -49,6 +60,12 @@ public class CustomerDAO {
 
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     * @throws SQLException
+     */
     Customer findCustomer(int id) throws SQLException {
         String query = "SELECT * FROM Customer WHERE customerID = ?";
         PreparedStatement preparedStatement = preparedStatementMethod(query);
@@ -72,6 +89,12 @@ public class CustomerDAO {
 
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     * @throws SQLException
+     */
     Boolean deleteCustomer(int id) throws SQLException {
         String query = "DELETE FROM Customer WHERE customerID = ?";
 
@@ -96,71 +119,55 @@ public class CustomerDAO {
         return false;
     }
 
+    /**
+     *
+     * @param customer
+     * @return
+     * @throws SQLException
+     */
     Boolean updateCustomer(Customer customer) throws SQLException {
-        String[] updateCustomerPrompt = {
-                "Please enter the businessName",
-                "Please enter the telephoneNumber",
-                "Please enter the addressline0",
-                "Please enter the addressline1",
-                "Please enter the addressline2",
-                "Please enter the postcode",
-                "Please enter the country"
-                };
-        String[] customerAttribute = {
-                "businessName",
-                "telephoneNumber",
-                "addressLine0",
-                "addressLine1",
-                "addressLine2",
-                "postCode",
-                "country"
-                };
-        int rowsUpdated = 0;
-
-
-        Scanner scanner = new Scanner(System.in);
-        System.out.println(customer);
-
+        int rowsUpdated;
         AddressDAO addressDAO = new AddressDAO();
+        // This updates the address table in the database and returns the numbers of rows updated
+        rowsUpdated = addressDAO.updateAddress(customer.getAddress());
 
-        for (int i = 0; i < updateCustomerPrompt.length; i++) {
-
-            System.out.println(updateCustomerPrompt[i]);
-            String res = scanner.nextLine();
-
-            // When there's no input, the system loops back to the next prompt
-            if (res.length() == 0 && i < updateCustomerPrompt.length - 1){
-                continue;
-            }
-
-            // The loop stops after the last prompt
-            if (res.length() == 0 && i == updateCustomerPrompt.length - 1){
-                break;
-            }
-
-            // Ensures only address attrs are used in the updateAddress method below
-            if (i > 1){
-
-                addressDAO.updateAddress(customer.getAddress(), customerAttribute[i],res);
-
-            } else {
-
-                String query = "UPDATE Customer SET " + customerAttribute[i] +" = ? WHERE customerID = ?";
-
-                PreparedStatement preparedStatement = preparedStatementMethod(query);
-                preparedStatement.setString(1, res);
-                preparedStatement.setInt(2, customer.getCustomerID());
-                rowsUpdated = preparedStatement.executeUpdate();
-                preparedStatement.close();
-
-            }
+        Customer currentCustomer = findCustomer(customer.getCustomerID());
+        System.out.println(currentCustomer);
 
 
+        String query = "" +
+            "UPDATE Customer " +
+            "SET businessName = ?, " +
+            "telephoneNumber = ? " +
+            "WHERE customerID = ?";
 
+        PreparedStatement preparedStatement = preparedStatementMethod(query);
+        if (customer.getBusinessName().isEmpty() || customer.getBusinessName() == null) {
+            preparedStatement.setString(1, currentCustomer.getBusinessName());
+        } else {
+            preparedStatement.setString(1, customer.getBusinessName());
         }
+
+        if (customer.getTelephoneNumber().isEmpty() || customer.getTelephoneNumber() == null) {
+            preparedStatement.setString(2, currentCustomer.getTelephoneNumber());
+        } else {
+            preparedStatement.setString(2, customer.getTelephoneNumber());
+        }
+
+        preparedStatement.setInt(3, customer.getCustomerID());
+        rowsUpdated += preparedStatement.executeUpdate();
+        preparedStatement.close();
+
         return (rowsUpdated > 0);
+
     }
 
+    /**
+     *
+     * @param customer
+     * @return
+     * @throws SQLException
+     */
     Boolean addCustomer(Customer customer) throws SQLException {
         String insertSql = "INSERT INTO Customer (addressID, businessName, telephoneNumber) VALUES (?, ?, ?)";
         PreparedStatement preparedStatement = preparedStatementMethod(insertSql);
@@ -173,6 +180,18 @@ public class CustomerDAO {
         return (rs > 0);
     }
 
+    /**
+     *
+     * @param customerAddresssline0
+     * @param customerAddresssline1
+     * @param customerAddresssline2
+     * @param customerCountry
+     * @param customerPostcode
+     * @param customerBusinessName
+     * @param customerTelephoneNumber
+     * @return
+     * @throws SQLException
+     */
     Customer returnCustomerWithAddress(
             String customerAddresssline0,
             String customerAddresssline1,
@@ -195,4 +214,70 @@ public class CustomerDAO {
                 lastInsertedAddressRecordObj,
                 customerTelephoneNumber);
     }
+
+    /**
+     *
+     * @param customerAddressId
+     * @param customerId
+     * @param customerAddresssline0
+     * @param customerAddresssline1
+     * @param customerAddresssline2
+     * @param customerCountry
+     * @param customerPostcode
+     * @param customerBusinessName
+     * @param customerTelephoneNumber
+     * @return
+     * @throws SQLException
+     */
+    Customer returnUpdatedCustomerWithAddress(
+            int customerAddressId,
+            int customerId,
+            String customerAddresssline0,
+            String customerAddresssline1,
+            String customerAddresssline2,
+            String customerCountry,
+            String customerPostcode,
+            String customerBusinessName,
+            String customerTelephoneNumber) throws SQLException {
+
+        Address address = new Address(
+                customerAddresssline0,
+                customerAddresssline1,
+                customerAddresssline2,
+                customerCountry,
+                customerPostcode);
+        address.setAddressID(customerAddressId);
+
+        Customer customer = new Customer(
+                customerBusinessName,
+                address,
+                customerTelephoneNumber);
+        customer.setCustomerID(customerId);
+
+        return customer;
+    }
+
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
