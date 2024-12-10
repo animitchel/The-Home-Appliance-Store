@@ -69,7 +69,7 @@ public class HomeApplianceDAO {
      * @return
      * @throws SQLException
      */
-    ArrayList findAllProducts() throws SQLException {
+    ArrayList<HomeAppliance> findAllProducts() throws SQLException {
         ArrayList<HomeAppliance> productList = new ArrayList<>();
 
         String query = "SELECT * FROM appliance";
@@ -206,7 +206,7 @@ public class HomeApplianceDAO {
         String insertSql = "INSERT INTO appliance (sku, description, category, price) VALUES (?, ?, ?, ?)";
         PreparedStatement preparedStatement = preparedStatementMethod(insertSql);
 
-        preparedStatement.setString(1, homeAppliance.getSku());
+        preparedStatement.setString(1, homeAppliance.getSku().toUpperCase());
         preparedStatement.setString(2, homeAppliance.getDescription());
         preparedStatement.setString(3, homeAppliance.getCategory());
         preparedStatement.setInt(4, homeAppliance.getPrice());

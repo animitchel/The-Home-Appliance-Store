@@ -29,7 +29,7 @@ public class ControllerHomeAppliance {
                     // insert code to find all appliances
                     System.out.println("Retrieving all products ...");
 
-                    ArrayList appliances = homeApplianceDAO.findAllProducts();
+                    ArrayList<HomeAppliance> appliances = homeApplianceDAO.findAllProducts();
                     for (int i = 0; i < appliances.size(); i++) {
                         System.out.println(appliances.get(i));
                     }
@@ -58,7 +58,7 @@ public class ControllerHomeAppliance {
 
 
                     HomeAppliance homeAppliance = new HomeAppliance(
-                            productSku.toUpperCase(), productDescription,
+                            productSku, productDescription,
                             productCategory, productPrice);
                     homeApplianceDAO.addProduct(homeAppliance);
                     break;
